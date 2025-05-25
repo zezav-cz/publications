@@ -20,6 +20,8 @@ jobs:
             path: dbso
           - name: normality
             path: normality
+          - name: leader_election-as_far_as_possible
+            path: le-afap
     steps:
       - name: Set up Typst
         uses: typst-community/setup-typst@v4

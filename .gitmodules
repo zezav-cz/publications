@@ -4,3 +4,6 @@
 [submodule "normality"]
 	path = normality
 	url = git@github.com:zezav-cz/normality.git
+[submodule "le-asap"]
+	path = le-afap
+	url = git@github.com:zezav-cz/leader-election-afas.git
