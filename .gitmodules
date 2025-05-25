@@ -1,0 +1,3 @@
+[submodule "distributed_block_and_object_storages"]
+	path = dbso
+	url = git@github.com:zezav-cz/distributed_block_and_object_storages.git

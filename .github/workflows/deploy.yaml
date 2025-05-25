@@ -1,0 +1,69 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main'] # Only run on the main branch
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pub:
+          - name: distributed_block_and_object_storages
+            path: dbso
+    steps:
+      - name: Set up Typst
+        uses: typst-community/setup-typst@v4
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN }}
+          lfs: true
+      - name: Compile Typst
+        run: |
+          mkdir -p dist
+          typst compile ${{ matrix.pub.path }}/src/main.typ dist/${{ matrix.pub.name }}.pdf
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.pub.name }}.pdf
+          path: dist/${{ matrix.pub.name }}.pdf
+  build-index-page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+      - name: Build Index Page
+        uses: jaywcjlove/markdown-to-html-cli@main
+        with:
+          source: README.md
+          output: index.html
+      - name: Upload Index Page
+        uses: actions/upload-artifact@v4
+        with:
+          name: readme-index-page
+          path: index.html
+  publish:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: public/
+          merge-multiple: true
+      - name: Upload Page Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
