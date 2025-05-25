@@ -18,6 +18,8 @@ jobs:
         pub:
           - name: distributed_block_and_object_storages
             path: dbso
+          - name: normality
+            path: normality
     steps:
       - name: Set up Typst
         uses: typst-community/setup-typst@v4
