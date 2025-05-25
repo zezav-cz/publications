@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      matrix: &matrix
+      matrix:
         file: [distributed_block_and_object_storages]
     steps:
       - name: Set up Typst
